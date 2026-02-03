@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HELLOOO!</title>
+  <link rel="icon" type="image/jpeg" href="bibble.gif">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+  <style>
+    /* Konteyner (question-area) için stil */
+    .question-area {
+      position: relative; /* Butonun 'absolute' konumlandırılması için referans noktası */
+      min-height: 450px; /* Butonun hareket etmesi için yeterli alan sağlar */
+      padding: 30px;     /* Kenarlara çok yaklaşmasını önlemek için iç boşluk */
+      box-sizing: border-box; /* Padding'i boyutlandırmaya dahil et */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Hayır butonu için stil */
+    #no-btn {
+      position: absolute; /* Konteynere göre konumlandır */
+      transition: top 0.2s ease-out, left 0.2s ease-out; /* Harekete yumuşak geçiş ekle */
+      /* Başlangıç pozisyonunu ayarlayabilirsiniz, örneğin: */
+      left: calc(50% + 50px);
+      top: 60%;
+    }
+
+    /* Evet butonunun yerini korumak için gerekirse ayar yapın */
+    #yes-btn {
+       margin-left: -80px; /* Örnek: Hayır butonu absolute olunca kaymayı engellemek için */
+    }
+
+    /* Diğer stilleriniz (main.css'den gelenler) */
+    body {
+        /* ... main.css'deki body stilleri ... */
+        overflow: hidden; /* Butonun dışarı taşmasını engellemek için (ekstra önlem) */
+    }
+    .container {
+        /* ... */
+    }
+    .sparkle-background, .overlay, .loader, .celebration, .ground-footer {
+        /* ... */
+    }
+    .spark {
+        /* ... */
+    }
+
+  </style>
+</head>
+<body>
+  <div class="sparkle-background"></div>
+  <div class="overlay"></div>
+  <div class="loader"><img src="loader.gif" alt="Loading..."></div>
+  <div class="container">
+    <div class="question-area">
+      <div class="celebration-row">
+        <img src="cutest-white-cat.gif" style="height: 100px; width: 100px;" alt="Hello Kitty" class="hello-kitty">
+        <img src="happy.gif" alt="neko">
+        <img src="hellokitty.gif" style="border-radius: 10px;" alt="Peach and Goma" class="left-image">
+      </div>
+      <div>
+        <h1>SELAM GUZELLIK, KAHVE ICELIM MI?</h1>
+        <button id="yes-btn">Evet</button> <button id="no-btn">Hayır</button>
+      </div>
+      <div class="celebration-row">
+        <img src="studio-ghibli-ponyo-on-the-cliff.gif" alt="">
+        <img src="rose-cat-give-give-rose-to-cat.gif" alt="Rose Cat" class="right-image" style="border-radius: 5px;">
+        <img src="cattt.gif" alt="">
+      </div>
+    </div>
+    <div id="celebration" class="hidden" style="margin-top: 100px;">
+      <div class="celebration-row">
+        <img src="cute-cat.gif" alt="Bibble" class="bibble" style="border-radius: 5px;">
+        <img src="my-melody.gif" alt="Kakashi" >
+        <img src="sanrio.gif" alt="Cute Cat" class="cute-cat">
+      </div>
+      <div>
+        <h1>YASASINNNNN!!!</h1>
+      </div>
+      <div class="celebration-row">
+        <img src="white-cute-cat-hearts.gif" alt="White Cute Cat" class="white-cute-cat-heart">
+        <img src="cat-jump.gif" alt="cat jump" style="width: 200px;">
+        <img src="heart.gif" alt="Heart" class="heart-gif">
+      </div>
+    </div>
+  </div>
+  <div class="ground-footer"></div>
+
+  <audio id="celebration-sound" src="yippie.mp3" loop></audio>
+
+  <script>
+    // Adjust zoom based on screen width
+    function adjustZoom() {
+      if (window.innerWidth > 768) {
+        document.body.style.zoom = "1.30";
+      } else {
+        document.body.style.zoom = "1.0";
+      }
+    }
+    adjustZoom();
+    window.addEventListener('resize', adjustZoom);
+
+    document.getElementById('yes-btn').addEventListener('mouseover', createSparks);
+    function createSparks() {
+      for (let i = 0; i < 20; i++) {
+        const spark = document.createElement('div');
+        spark.classList.add('spark');
+
+        const angle = Math.random() * 2 * Math.PI;
+        const radius = Math.random() * 50 + 20;
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
+
+        spark.style.setProperty('--spark-x', `${x}px`);
+        spark.style.setProperty('--spark-y', `${y}px`);
+
+        const rect = document.getElementById('yes-btn').getBoundingClientRect();
+        spark.style.left = `${rect.left + rect.width / 2}px`;
+        spark.style.top = `${rect.top + rect.height / 2}px`;
+
+        document.body.appendChild(spark);
+
+        setTimeout(() => {
+          spark.remove();
+        }, 600);
+      }
+    }
+
+    // *** GÜNCELLENMİŞ KOD ***
+    document.getElementById('no-btn').addEventListener('mouseover', function() {
+      const button = this;
+      const container = document.querySelector('.question-area'); // Sınırları belirleyen konteyner
+
+      const buttonWidth = button.offsetWidth;
+      const buttonHeight = button.offsetHeight;
+
+      // Konteynerin iç boyutlarını al (padding dahil)
+      const containerWidth = container.clientWidth;
+      const containerHeight = container.clientHeight;
+
+      // Butonun konteyner içinde kalacağı maksimum X ve Y koordinatları
+      const maxX = containerWidth - buttonWidth;
+      const maxY = containerHeight - buttonHeight;
+
+      // 0 ile maxX/maxY arasında rastgele X ve Y değerleri üret
+      const x = Math.max(0, Math.random() * maxX);
+      const y = Math.max(0, Math.random() * maxY);
+
+      // Butonun yeni pozisyonunu ayarla
+      button.style.left = `${x}px`;
+      button.style.top = `${y}px`;
+    });
+    // *** GÜNCELLENMİŞ KOD SONU ***
+
+    document.getElementById('yes-btn').addEventListener('click', function() {
+      const overlay = document.querySelector('.overlay');
+      const loader = document.querySelector('.loader');
+      const celebration = document.getElementById('celebration');
+      const questionArea = document.querySelector('.question-area');
+      const audio = document.getElementById('celebration-sound');
+
+      overlay.style.display = 'block';
+      loader.style.display = 'block';
+
+      setTimeout(function() {
+        loader.style.display = 'none';
+        overlay.style.display = 'none';
+        questionArea.style.display = 'none';
+        celebration.style.display = 'block';
+        document.body.classList.add('celebration-active');
+
+        audio.play();
+
+        setTimeout(function() {
+          audio.pause();
+          audio.currentTime = 0;
+        }, 10000);
+
+      }, 3200);
+    });
+  </script>
+</body>
+</html>
